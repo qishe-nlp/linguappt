@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "linguappt"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Phoenix Grey <phoenix.grey0108@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -14,11 +14,11 @@ click = "^7.1.1"
 pytest = "^5.2"
 
 [tool.poetry.scripts]
-pptx_validate = 'entry.validation:validate'
-play_template = 'entry.usage:test_template_usage'
-vocab_csv2ppt = "entry.command:vocab_csv2ppt"
-ppt2pdf = 'entry.command:ppt2pdf'
-vocab_csv2pptpdf = "entry.command:vocab_csv2pptpdf"
+pptx_validate = 'linguappt.entry.validation:validate'
+play_template = 'linguappt.entry.usage:test_template_usage'
+vocab_csv2ppt = "linguappt.entry.command:vocab_csv2ppt"
+ppt2pdf = 'linguappt.entry.command:ppt2pdf'
+vocab_csv2pptpdf = "linguappt.entry.command:vocab_csv2pptpdf"
 
 
 [build-system]
