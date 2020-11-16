@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "linguappt"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+python-pptx = "^0.6.18"
+pdf2image = "^1.12.1"
+click = "^7.1.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+pptx_validate = 'entry.validation:validate'
+play_template = 'entry.usage:test_template_usage'
+vocab_csv2ppt = "entry.command:vocab_csv2ppt"
+ppt2pdf = 'entry.command:ppt2pdf'
+vocab_csv2pptpdf = "entry.command:vocab_csv2pptpdf"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
