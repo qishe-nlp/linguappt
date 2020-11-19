@@ -1,4 +1,4 @@
-from linguappt import SpanishVocabPPT, Pdf
+from linguappt import SpanishVocabPPT, EnglishVocabPPT, Pdf
 from linguappt import __version__
 import click
 import json
@@ -49,11 +49,18 @@ def ppt2pdf(sourcepptx, destdir):
 @click.command()
 @click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
 @click.option("--sourcecsv", prompt="source csv file path", help="Specify the source csv file path")
+@click.option("--lang", prompt="language", help="Specify the language")
 @click.option("--name", default="test", prompt="output file name", help="Specify the file name")
 @click.option("--pptxdir", prompt="dest pptx directory", help="Specify the pptx destination directory")
 @click.option("--pdfdir", prompt="dest pdf directory", help="Sepcify the pdf destionation directory")
 @click.option("--imgdir", prompt="dest image directory", help="Sepcify the preview image destionation directory")
-def vocab_csv2pptpdf(sourcecsv, name, pptxdir, pdfdir, imgdir):
+def vocab_csv2pptpdf(sourcecsv, lang, name, pptxdir, pdfdir, imgdir):
+  _PPTS = {
+    "en": EnglishVocabPPT,
+    "es": SpanishVocabPPT
+  }
+
+  _PPT = _PPTS[lang]
   phase = {"step": 1, "msg": "Start ppt generation"}
   print(json.dumps(phase), flush=True)
 
@@ -69,11 +76,11 @@ def vocab_csv2pptpdf(sourcecsv, name, pptxdir, pdfdir, imgdir):
   if not os.path.isdir(pptx_water_dir):
     os.mkdir(pptx_water_dir) 
 
-  vp = SpanishVocabPPT(sourcecsv, "歧舌AI备课助教")
+  vp = _PPT(sourcecsv, "歧舌AI备课助教")
   pptx = pptx_pro_dir + name +'.pptx'
   vp.convert_to_ppt(pptx)
 
-  vp = SpanishVocabPPT(sourcecsv, "歧舌AI备课助教", "watermark")
+  vp = _PPT(sourcecsv, "歧舌AI备课助教", "watermark")
   watermark_pptx = pptx_water_dir + name + ".pptx"
   vp.convert_to_ppt(watermark_pptx)
 

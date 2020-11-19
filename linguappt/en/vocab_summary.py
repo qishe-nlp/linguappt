@@ -7,16 +7,16 @@ import os
 import math
 import json
 
-class SpanishVocabMeta:
+class EnglishVocabMeta:
 
   pos_info = {
-    'noun': ('名词', 'el nombre', ['noun.', 'f.', 'm.', 'f.m.', 'propn,', 'f.pl.', 'm.pl.']),
-    'adj': ('形容词', 'el adjectivo', ['adj.']),
-    'verb': ('动词', 'el verbo', ['verb.', 'vr.', 'vi.', 'vt.', 'aux.']),
-    'adv': ('副词', 'el adverbio', ['adv.']),
-    'pron': ('代词', 'los pronombres', ['pron.']),
-    'prep': ('前置词', '', ['prep.', 'adp.']),
-    'other': ('其他', 'los otros', [])
+    'noun': ('名词', 'noun', ['n.']),
+    'adj': ('形容词', 'adjective', ['adj.', 'a.']),
+    'verb': ('动词', 'verb', ['v.', 'vt.vi.', 'vi.', 'vt.', 'aux.', 'vi.vt.']),
+    'adv': ('副词', 'adverb', ['adv.']),
+    'pron': ('代词', 'pronoun', ['pron.']),
+    'prep': ('前置词', '', ['prep.']),
+    'other': ('其他', 'others', [])
   }
 
   tense_info = {
@@ -34,29 +34,29 @@ class SpanishVocabMeta:
     'gerundio': "现在分词"
   }
 
-class SpanishVocabPPT(PPT):
+class EnglishVocabPPT(PPT):
 
   template_dir = os.path.dirname(__file__)
   templates = {
-    "classic": os.path.join(template_dir, 'templates/vocab_spanish_classic.pptx'),
-    "watermark": os.path.join(template_dir, 'templates/vocab_spanish_watermark.pptx')
+    "classic": os.path.join(template_dir, 'templates/vocab_english_classic.pptx'),
+    "watermark": os.path.join(template_dir, 'templates/vocab_english_watermark.pptx')
   }
-  lang = 'es'
+  lang = 'en'
 
   def __init__(self, sourcefile, title="", genre="classic"):
     """
     word_distribution is a list of dict
     e.g,
     word_distribution = [
-      {word: 'Hola', pos: 'INTJ', num: 2},
-      {word: 'bueno', pos: 'ADJ', num: 20},
-      {word: 'pues', pos: 'ADV', num: 4},
+      {word: 'Hello', pos: 'INTJ', num: 2},
+      {word: 'good', pos: 'ADJ', num: 20},
+      {word: 'then', pos: 'ADV', num: 4},
     ]
     """
 
-    self.template = SpanishVocabPPT.templates[genre]
+    self.template = EnglishVocabPPT.templates[genre]
 
-    self.keys = ['num', 'word', 'pos', 'meaning', 'dict_pos', 'from', 'extension', 'variations']
+    self.keys = ['num', 'word', 'pos', 'meaning', 'dict_pos', 'from', 'extension', 'variations', 'examples']
     self.content = self.assert_content(sourcefile)
 
     self.divide_by_pos()
@@ -93,13 +93,13 @@ class SpanishVocabPPT(PPT):
 
   def cal_displayed_word_distribution(self):
     """
-      Bridge dict_pos and pos defined in SpanishVocabMeta
+      Bridge dict_pos and pos defined in EnglishVocabMeta
       Store words in self.displayed_word_distribution as dict, which are used to presented in ppt.
-      Key in self.displayed_word_distribution is pos defined SpanishVocabMeta and value is a list of words
+      Key in self.displayed_word_distribution is pos defined EnglishVocabMeta and value is a list of words
     """
     self.displayed_word_distribution = {}
-    for key in SpanishVocabMeta.pos_info.keys():
-      poses = SpanishVocabMeta.pos_info[key][2] 
+    for key in EnglishVocabMeta.pos_info.keys():
+      poses = EnglishVocabMeta.pos_info[key][2] 
       self.displayed_word_distribution[key] = []
       for pos in poses:
         if pos in self.word_distribution.keys():
@@ -108,12 +108,12 @@ class SpanishVocabPPT(PPT):
 
   def cal_distribution(self):
     """
-      Calculate the number of words according to pos defined in SpanishVocabMeta
+      Calculate the number of words according to pos defined in EnglishVocabMeta
     """
-    self.distribution = [{"pos": pos, "name": SpanishVocabMeta.pos_info[pos][1], "num": len(ws)} for pos, ws in self.displayed_word_distribution.items()]
+    self.distribution = [{"pos": pos, "name": EnglishVocabMeta.pos_info[pos][1], "num": len(ws)} for pos, ws in self.displayed_word_distribution.items()]
 
   def create_home(self):
-    layout = self.prs.slide_layouts.get_by_name("Title and subtitle")
+    layout = self.prs.slide_layouts.get_by_name("Title and subtitle for chinese")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
  
@@ -147,73 +147,40 @@ class SpanishVocabPPT(PPT):
     note.notes_text_frame.text = title_content.lower()
 
 
-  def create_noun_m_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun m vocab")
+  def create_noun_word(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Noun vocab")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    noun, meaning = holders[10], holders[11]
+    noun, meaning = holders[11], holders[12]
     noun.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
       ms = ms[:4]
     meaning.text_frame.text = "\n".join(ms) 
 
-    s_def, s = holders[12], holders[13]
-    s_def.text_frame.text = "el"
-    s.text_frame.text = v["word"]
-
-    s_undef, s = holders[14], holders[15]
-    s_undef.text_frame.text = "un"
-    s.text_frame.text = v["word"]
-
     if v["extension"] != "":
       extension = json.loads(v["extension"])
+      single, plural = holders[13], holders[14]
+      single.text_frame.text = v["word"]
+      plural.text_frame.text = extension["s"]
 
-      pl_def, pl = holders[16], holders[17]
-      pl_def.text_frame.text = "los"
-      pl.text_frame.text = extension["mpl"]
+    if v["examples"] != "":
+      examples = json.loads(v["examples"])
+      if len(examples) == 2:
+        original, translated = holders[15], holders[16]
+        ex = examples[0]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
 
-      pl_undef, pl = holders[18], holders[19]
-      pl_undef.text_frame.text = "unos"
-      pl.text_frame.text = extension["mpl"]
+        original, translated = holders[17], holders[18]
+        ex = examples[1]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-  def create_noun_f_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun f vocab")
-    slide = self.prs.slides.add_slide(layout)
-    holders = slide.shapes.placeholders
-
-    noun, meaning = holders[10], holders[11]
-    noun.text_frame.text = v["word"]
-    ms = v["meaning"].split(",")
-    if len(ms) > 4:
-      ms = ms[:4]
-    meaning.text_frame.text = "\n".join(ms) 
-
-    s_def, s = holders[12], holders[13]
-    s_def.text_frame.text = "la"
-    s.text_frame.text = v["word"]
-
-    s_undef, s = holders[14], holders[15]
-    s_undef.text_frame.text = "una"
-    s.text_frame.text = v["word"]
-
-    if v["extension"] != "":
-      extension = json.loads(v["extension"])
-
-      pl_def, pl = holders[16], holders[17]
-      pl_def.text_frame.text = "las"
-      pl.text_frame.text = extension["fpl"]
-
-      pl_undef, pl = holders[18], holders[19]
-      pl_undef.text_frame.text = "unas"
-      pl.text_frame.text = extension["fpl"]
-
-    note = slide.notes_slide
-    note.notes_text_frame.text = v["word"]
 
   def create_noun_mpl_word(self, v):
     layout = self.prs.slide_layouts.get_by_name("Noun m vocab")
@@ -236,7 +203,7 @@ class SpanishVocabPPT(PPT):
     s.text_frame.text = v["word"]
 
     if v["extension"] != "":
-      extension = json.loads(v["extension"])
+      extension = json.loads(v["extension"].replace("\'", "\""))
 
       pl_def, pl = holders[16], holders[17]
       pl_def.text_frame.text = "el"
@@ -249,46 +216,12 @@ class SpanishVocabPPT(PPT):
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-  def create_noun_fpl_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun f vocab")
-    slide = self.prs.slides.add_slide(layout)
-    holders = slide.shapes.placeholders
-
-    noun, meaning = holders[10], holders[11]
-    noun.text_frame.text = v["word"]
-    ms = v["meaning"].split(",")
-    if len(ms) > 4:
-      ms = ms[:4]
-    meaning.text_frame.text = "\n".join(ms) 
-
-    s_def, s = holders[12], holders[13]
-    s_def.text_frame.text = "las"
-    s.text_frame.text = v["word"]
-
-    s_undef, s = holders[14], holders[15]
-    s_undef.text_frame.text = "unas"
-    s.text_frame.text = v["word"]
-
-    if v["extension"] != "":
-      extension = json.loads(v["extension"])
-
-      pl_def, pl = holders[16], holders[17]
-      pl_def.text_frame.text = "la"
-      pl.text_frame.text = extension["f"]
-
-      pl_undef, pl = holders[18], holders[19]
-      pl_undef.text_frame.text = "una"
-      pl.text_frame.text = extension["f"]
-
-    note = slide.notes_slide
-    note.notes_text_frame.text = v["word"]
-
   def create_adj_word(self, v):
     layout = self.prs.slide_layouts.get_by_name("Adj vocab")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    adj, meaning = holders[10], holders[11]
+    adj, meaning = holders[11], holders[12]
     adj.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
@@ -296,25 +229,26 @@ class SpanishVocabPPT(PPT):
 
     meaning.text_frame.text = "\n".join(ms)
 
-    s_m, s_f, pl_m, pl_f = holders[12], holders[13], holders[14], holders[15]
+    much, more, most = holders[13], holders[14], holders[15] 
     if v["extension"] != "":
       extension = json.loads(v["extension"])
 
-      s_m.text_frame.text = extension["m"]
-      s_f.text_frame.text = extension["f"]
-      pl_m.text_frame.text = extension["mpl"]
-      pl_f.text_frame.text = extension["fpl"]
+      much.text_frame.text = extension['original'] 
+      more.text_frame.text = extension['comparative']
+      most.text_frame.text = extension['superlative']
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
   def create_default_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Default vocab")
+    layout = self.prs.slide_layouts.get_by_name("Common layout")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
    
-    word = holders[10]
-    meaning = holders[11]
+    pos = holders[12]
+    word = holders[13]
+    meaning = holders[14]
+    pos.text_frame.text = v["dict_pos"]
     word.text_frame.text = v["word"] 
     ms = v["meaning"].split(",")
     if len(ms) > 4:
@@ -322,26 +256,28 @@ class SpanishVocabPPT(PPT):
 
     meaning.text_frame.text = "\n".join(ms)
  
+    if v["examples"] != "":
+      examples = json.loads(v["examples"])
+      if len(examples) == 2:
+        original, translated = holders[15], holders[16]
+        ex = examples[0]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
+
+        original, translated = holders[17], holders[18]
+        ex = examples[1]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
+
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
-
-    #slide = self.prs.slides.add_slide(layout)
-    #holders = slide.shapes.placeholders
-
-    #word = holders[10]
-    #explaination = holders[11]
-    #word.text_frame.text = v["word"] 
-    #word.text_frame.paragraphs[0].font.color.rgb = RGBColor(255, 51, 0)
-    #explaination.text_frame.text = v["meaning"] 
-    #note = slide.notes_slide
-    #note.notes_text_frame.text = " ".join([v["word"]]*2)
 
   def create_single_tiempo_verb_word(self, v):
     layout = self.prs.slide_layouts.get_by_name("Verb single tiempo")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
-    variations = json.loads(v["variations"])
+    variations = json.loads(v["variations"].replace("\'", "\""))
 
     origin, word, meaning = holders[10], holders[11], holders[12]
     origin.text_frame.text = variations["origin"]
@@ -358,7 +294,7 @@ class SpanishVocabPPT(PPT):
     tense = sign["tense"]
     person = sign["person"]
 
-    extension = json.loads(v["extension"])[tense]
+    extension = json.loads(v["extension"].replace("\'", "\""))[tense]
 
     holders[13].text_frame.text = extension["yo"] if extension["yo"] != "" else " "
     holders[14].text_frame.text = extension["tú"]
@@ -367,7 +303,7 @@ class SpanishVocabPPT(PPT):
     holders[17].text_frame.text = extension["vosotros"]
     holders[18].text_frame.text = extension["ellos/ellas/Ustedes"]
 
-    holders[19].text_frame.text = SpanishVocabMeta.tense_info[tense]
+    holders[19].text_frame.text = EnglishVocabMeta.tense_info[tense]
     holders[20].text_frame.text = " ".join(["人称", person, "的变位"])
 
     note = slide.notes_slide
@@ -379,7 +315,7 @@ class SpanishVocabPPT(PPT):
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
-    variations = json.loads(v["variations"])
+    variations = json.loads(v["variations"].replace("\'", "\""))
 
     origin, word, meaning = holders[10], holders[11], holders[12]
     origin.text_frame.text = variations["origin"]
@@ -392,7 +328,7 @@ class SpanishVocabPPT(PPT):
     meaning.text_frame.text = "\n".join(ms)
  
     formats = variations["formats"]
-    holders[13].text_frame.text = "\n".join([SpanishVocabMeta.tense_info[f["tense"]] if "tense" in f.keys() else SpanishVocabMeta.tense_info[f["format"]] for f in formats])
+    holders[13].text_frame.text = "\n".join([EnglishVocabMeta.tense_info[f["tense"]] if "tense" in f.keys() else EnglishVocabMeta.tense_info[f["format"]] for f in formats])
     holders[14].text_frame.text = "\n".join([" ".join([f["person"], "的变位"]) if "person" in f.keys() else "" for f in formats])
 
     note = slide.notes_slide
@@ -403,7 +339,7 @@ class SpanishVocabPPT(PPT):
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
-    variations = json.loads(v["variations"])
+    variations = json.loads(v["variations"].replace("\'", "\""))
 
     origin, word, meaning = holders[10], holders[11], holders[12]
     origin.text_frame.text = variations["origin"]
@@ -417,61 +353,65 @@ class SpanishVocabPPT(PPT):
  
     sign = variations["formats"][0]
 
-    holders[13].text_frame.text = SpanishVocabMeta.tense_info[sign["format"]]
+    holders[13].text_frame.text = EnglishVocabMeta.tense_info[sign["format"]]
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
   def create_verb_word(self, v):
-    if v["variations"] == "":
-      self.create_default_word(v)
-    else:
-      variations = json.loads(v["variations"])
-      if "formats" in variations.keys():
-        formats = variations["formats"]
-        if len(formats) > 1:
-          self.create_multi_tiempo_verb_word(v)
-        elif "tense" in formats[0].keys():
-          self.create_single_tiempo_verb_word(v)
-        elif "format" in formats[0].keys():
-          self.create_particle_verb_word(v)
-        else:
-          self.create_default_word(v)
-      else:
-        self.create_default_word(v)
+    layout = self.prs.slide_layouts.get_by_name("Original verb vocab")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+    
+    word, meaning = holders[11], holders[12]
+    word.text_frame.text = v["word"]
 
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+
+    meaning.text_frame.text = "\n".join(ms)
+ 
+    if v["examples"] != "":
+      examples = json.loads(v["examples"])
+      if len(examples) == 2:
+        original, translated = holders[14], holders[15]
+        ex = examples[0]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
+
+        original, translated = holders[16], holders[17]
+        ex = examples[1]
+        original.text_frame.text = ex["original"]
+        translated.text_frame.text = ex["translated"]
+
+ 
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
 
   def create_vocab_group(self, vocabs):
     for v in vocabs:
       pos = v["dict_pos"]
-      if pos == 'm.':
-        self.create_noun_m_word(v) 
-      elif pos == 'f.':
-        self.create_noun_f_word(v)
-      elif pos == 'm.pl.':
-        self.create_noun_mpl_word(v) 
-      elif pos == 'f.pl.':
-        self.create_noun_fpl_word(v)
-      elif pos == 'adj.' and v['extension'] != "":
+      if pos in EnglishVocabMeta.pos_info['noun'][2] and v['extension'] != '' and v['examples'] != '[]':
+        self.create_noun_word(v) 
+      elif pos in EnglishVocabMeta.pos_info['adj'][2] and v['extension'] != '' and v['examples'] != '[]':
         self.create_adj_word(v)
-      elif pos == 'adj.' and v['extension'] == "":
-        pass
-      elif pos == 'noun.':
-        pass
-      elif pos in ['verb.', 'vr.', 'vi.', 'vt.', 'aux.']:
+      elif pos in EnglishVocabMeta.pos_info['verb'][2] and v['examples'] != '[]':
         self.create_verb_word(v)
+      elif v['examples'] != '[]':
+        self.create_default_word(v)
       else:
         pass
         #self.create_default_word(v)
 
   def create_vocab(self):
     """
-    Create 3 pos group pages, which are noun, adj, verb, refer to SpanishVocabMeta
+    Create 3 pos group pages, which are noun, adj, verb, refer to EnglishVocabMeta
     """
     for index, (pos, ws) in enumerate(self.displayed_word_distribution.items()):
       if index < 3 and len(ws) > 0:
-        subtitle = SpanishVocabMeta.pos_info[pos][0]
-        title = SpanishVocabMeta.pos_info[pos][1].upper()
+        subtitle = EnglishVocabMeta.pos_info[pos][0]
+        title = EnglishVocabMeta.pos_info[pos][1].upper()
         self.create_vocab_title(index+1, title, subtitle)
         self.create_vocab_group(ws)
 
