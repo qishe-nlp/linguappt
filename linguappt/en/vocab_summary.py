@@ -11,7 +11,7 @@ class EnglishVocabMeta:
 
   pos_info = {
     'noun': ('名词', 'noun', ['n.']),
-    'adj': ('形容词', 'adjective', ['adj.', 'a.']),
+    'adj': ('形容词', 'adjective', ['adj.']),
     'verb': ('动词', 'verb', ['v.', 'vt.vi.', 'vi.', 'vt.', 'aux.', 'vi.vt.']),
     'adv': ('副词', 'adverb', ['adv.']),
     'pron': ('代词', 'pronoun', ['pron.']),
@@ -19,19 +19,16 @@ class EnglishVocabMeta:
     'other': ('其他', 'others', [])
   }
 
-  tense_info = {
-    'imperativo_afirmativo': "命令式-肯定",
-    'imperativo_negativo': "命令式-否定",
-    'indicativo-pretérito': "陈述式-过去时",
-    'indicativo-presente': "陈述式-现在时",
-    'subjuntivo-presente': "虚拟式-现在时",
-    'indicativo-futuro': "陈述式-将来时",
-    'subjuntivo-futuro': "虚拟式-将来时",
-    'indicativo-imperfecto': "陈述式-未完成时",
-    'subjuntivo-imperfecto': "虚拟式-未完成时",
-    'indicativo-condicional': "条件式",
-    'participio': "过去分词",
-    'gerundio': "现在分词"
+  format_info = {
+    'original': "原型",
+    'present_participle': "现在分词",
+    'past_participle': "过去分词",
+    'past_tense': "过去式",
+    '3': "三单",
+    'comparative': "比较级",
+    'superlative': "最高级",
+    'singular': "单数",
+    'plural': "复数"
   }
 
 class EnglishVocabPPT(PPT):
@@ -134,8 +131,8 @@ class EnglishVocabPPT(PPT):
       num.text_frame.text = str(info["num"])
 
 
-  def create_vocab_title(self, index, title_content, subtitle_content):
-    layout = self.prs.slide_layouts.get_by_name('Title '+str(index))
+  def create_vocab_title(self, pos, title_content, subtitle_content):
+    layout = self.prs.slide_layouts.get_by_name('Title for '+ pos)
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
@@ -146,82 +143,137 @@ class EnglishVocabPPT(PPT):
     note = slide.notes_slide
     note.notes_text_frame.text = title_content.lower()
 
+  def create_rich_noun(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Noun with extension and examples")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, noun, meaning = holders[10], holders[11], holders[12]
+    description = EnglishVocabMeta.format_info["singular"]
+    if v["variations"] != "":
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
+    noun.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+    meaning.text_frame.text = "\n".join(ms) 
+
+    extension = json.loads(v["extension"])
+    single, plural = holders[13], holders[14]
+    single.text_frame.text = extension["singular"]
+    plural.text_frame.text = extension["plural"]
+
+    examples = json.loads(v["examples"])
+    if len(examples) == 2:
+      original, translated = holders[15], holders[16]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+
+      original, translated = holders[17], holders[18]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+  def create_noun_with_extension(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Noun with extension")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, noun, meaning = holders[10], holders[11], holders[12]
+    description = EnglishVocabMeta.format_info["singular"]
+    if v["variations"] != "":
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
+
+    noun.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+    meaning.text_frame.text = "\n".join(ms) 
+
+    extension = json.loads(v["extension"])
+    single, plural = holders[13], holders[14]
+    single.text_frame.text = extension["singular"]
+    plural.text_frame.text = extension["plural"]
+
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+  def create_noun_with_examples(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Noun with examples")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, noun, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = v["dict_pos"]
+    noun.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+    meaning.text_frame.text = "\n".join(ms) 
+
+    examples = json.loads(v["examples"])
+    if len(examples) >= 1:
+      original, translated = holders[13], holders[14]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+    if len(examples) >= 2:
+      original, translated = holders[15], holders[16]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+  def create_default_noun(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Default noun")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, noun, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = "n."
+    noun.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+    meaning.text_frame.text = "\n".join(ms) 
+
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
 
   def create_noun_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun vocab")
+    extension, variations, examples = v["extension"], v["variations"], v["examples"]
+    if extension != "" and variations != "" and examples != "[]":
+      self.create_rich_noun(v)
+    elif extension != "" and examples == "[]":
+      self.create_noun_with_extension(v)
+    elif extension == "" and examples != "[]":
+      self.create_noun_with_examples(v)
+    else:
+      self.create_default_noun(v)
+
+  def create_rich_adj(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Adjective with extension and examples")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    noun, meaning = holders[11], holders[12]
-    noun.text_frame.text = v["word"]
-    ms = v["meaning"].split(",")
-    if len(ms) > 4:
-      ms = ms[:4]
-    meaning.text_frame.text = "\n".join(ms) 
-
-    if v["extension"] != "":
-      extension = json.loads(v["extension"])
-      single, plural = holders[13], holders[14]
-      single.text_frame.text = v["word"]
-      plural.text_frame.text = extension["s"]
-
-    if v["examples"] != "":
-      examples = json.loads(v["examples"])
-      if len(examples) == 2:
-        original, translated = holders[15], holders[16]
-        ex = examples[0]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
-        original, translated = holders[17], holders[18]
-        ex = examples[1]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
-    note = slide.notes_slide
-    note.notes_text_frame.text = v["word"]
-
-
-  def create_noun_mpl_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun m vocab")
-    slide = self.prs.slides.add_slide(layout)
-    holders = slide.shapes.placeholders
-
-    noun, meaning = holders[10], holders[11]
-    noun.text_frame.text = v["word"]
-    ms = v["meaning"].split(",")
-    if len(ms) > 4:
-      ms = ms[:4]
-    meaning.text_frame.text = "\n".join(ms) 
-
-    s_def, s = holders[12], holders[13]
-    s_def.text_frame.text = "los"
-    s.text_frame.text = v["word"]
-
-    s_undef, s = holders[14], holders[15]
-    s_undef.text_frame.text = "unos"
-    s.text_frame.text = v["word"]
-
-    if v["extension"] != "":
-      extension = json.loads(v["extension"].replace("\'", "\""))
-
-      pl_def, pl = holders[16], holders[17]
-      pl_def.text_frame.text = "el"
-      pl.text_frame.text = extension["m"]
-
-      pl_undef, pl = holders[18], holders[19]
-      pl_undef.text_frame.text = "uno"
-      pl.text_frame.text = extension["m"]
-
-    note = slide.notes_slide
-    note.notes_text_frame.text = v["word"]
-
-  def create_adj_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Adj vocab")
-    slide = self.prs.slides.add_slide(layout)
-    holders = slide.shapes.placeholders
-
-    adj, meaning = holders[11], holders[12]
+    pos, adj, meaning = holders[10], holders[11], holders[12]
+    description = ""
+    if v["variations"] != "":
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
     adj.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
@@ -229,177 +281,261 @@ class EnglishVocabPPT(PPT):
 
     meaning.text_frame.text = "\n".join(ms)
 
-    much, more, most = holders[13], holders[14], holders[15] 
-    if v["extension"] != "":
-      extension = json.loads(v["extension"])
+    much, more, most = holders[12], holders[13], holders[14]
+    extension = json.loads(v["extension"])
 
-      much.text_frame.text = extension['original'] 
-      more.text_frame.text = extension['comparative']
-      most.text_frame.text = extension['superlative']
+    much.text_frame.text = extension['original'] 
+    more.text_frame.text = extension['comparative']
+    most.text_frame.text = extension['superlative']
 
+    examples = json.loads(v["examples"])
+    if len(examples) >= 1:
+      original, translated = holders[15], holders[16]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+    if len(examples) >= 2:
+      original, translated = holders[17], holders[18]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+ 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-  def create_default_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Common layout")
+  def create_adj_with_examples(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Adjective with examples")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
-   
-    pos = holders[12]
-    word = holders[13]
-    meaning = holders[14]
-    pos.text_frame.text = v["dict_pos"]
-    word.text_frame.text = v["word"] 
+
+    pos, adj, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = v["dict_pos"] 
+    adj.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
       ms = ms[:4]
 
     meaning.text_frame.text = "\n".join(ms)
+
+    examples = json.loads(v["examples"])
+    if len(examples) >= 1:
+      original, translated = holders[13], holders[14]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+    if len(examples) >= 2:
+      original, translated = holders[15], holders[16]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
  
-    if v["examples"] != "":
-      examples = json.loads(v["examples"])
-      if len(examples) == 2:
-        original, translated = holders[15], holders[16]
-        ex = examples[0]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
-        original, translated = holders[17], holders[18]
-        ex = examples[1]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-  def create_single_tiempo_verb_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb single tiempo")
+
+
+  def create_adj_with_extension(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Adjective with extension")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
-    
-    variations = json.loads(v["variations"].replace("\'", "\""))
 
-    origin, word, meaning = holders[10], holders[11], holders[12]
-    origin.text_frame.text = variations["origin"]
-    word.text_frame.text = v["word"]
-
+    pos, adj, meaning = holders[10], holders[11], holders[12]
+    description = ""
+    if v["variations"] != "":
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
+    adj.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
       ms = ms[:4]
 
     meaning.text_frame.text = "\n".join(ms)
- 
 
-    sign = variations["formats"][0]
-    tense = sign["tense"]
-    person = sign["person"]
+    much, more, most = holders[13], holders[14], holders[15]
+    extension = json.loads(v["extension"])
 
-    extension = json.loads(v["extension"].replace("\'", "\""))[tense]
-
-    holders[13].text_frame.text = extension["yo"] if extension["yo"] != "" else " "
-    holders[14].text_frame.text = extension["tú"]
-    holders[15].text_frame.text = extension["él/ella/Usted"]
-    holders[16].text_frame.text = extension["nosotros"]
-    holders[17].text_frame.text = extension["vosotros"]
-    holders[18].text_frame.text = extension["ellos/ellas/Ustedes"]
-
-    holders[19].text_frame.text = EnglishVocabMeta.tense_info[tense]
-    holders[20].text_frame.text = " ".join(["人称", person, "的变位"])
+    much.text_frame.text = extension['original'] 
+    more.text_frame.text = extension['comparative']
+    most.text_frame.text = extension['superlative']
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-
-  def create_multi_tiempo_verb_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb multi tiempo")
+  def create_default_adj(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Default adjective")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
-    
-    variations = json.loads(v["variations"].replace("\'", "\""))
 
-    origin, word, meaning = holders[10], holders[11], holders[12]
-    origin.text_frame.text = variations["origin"]
-    word.text_frame.text = v["word"]
+    pos, adj, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = v["dict_pos"] 
 
+    adj.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
       ms = ms[:4]
 
     meaning.text_frame.text = "\n".join(ms)
- 
-    formats = variations["formats"]
-    holders[13].text_frame.text = "\n".join([EnglishVocabMeta.tense_info[f["tense"]] if "tense" in f.keys() else EnglishVocabMeta.tense_info[f["format"]] for f in formats])
-    holders[14].text_frame.text = "\n".join([" ".join([f["person"], "的变位"]) if "person" in f.keys() else "" for f in formats])
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
-  def create_particle_verb_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb participle")
+
+  def create_adj_word(self, v):
+    extension, variations, examples = v["extension"], v["variations"], v["examples"]
+    if extension != "" and variations != "" and examples != "[]":
+      self.create_rich_adj(v)
+    elif extension != "" and examples == "[]":
+      self.create_adj_with_extension(v)
+    elif extension == "" and examples != "[]":
+      self.create_adj_with_examples(v)
+    else:
+      self.create_default_adj(v)
+
+  def create_rich_verb(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Verb with extension and examples")
     slide = self.prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
-    
-    variations = json.loads(v["variations"].replace("\'", "\""))
 
-    origin, word, meaning = holders[10], holders[11], holders[12]
-    origin.text_frame.text = variations["origin"]
-    word.text_frame.text = v["word"]
-
+    pos, verb, meaning = holders[10], holders[11], holders[12]
+    description = ""
+    if v["variations"] != "":
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
+    verb.text_frame.text = v["word"]
     ms = v["meaning"].split(",")
     if len(ms) > 4:
       ms = ms[:4]
 
     meaning.text_frame.text = "\n".join(ms)
- 
-    sign = variations["formats"][0]
 
-    holders[13].text_frame.text = EnglishVocabMeta.tense_info[sign["format"]]
+    original, present_participle, past_tense, past_participle, third  = holders[13], holders[14], holders[15], holders[16], holders[17]
+    extension = json.loads(v["extension"])
+
+    original.text_frame.text = extension['original'] if 'original' in extension else " "
+    past_tense.text_frame.text = extension['past_tense'] if 'past_tense' in extension else " "
+    third.text_frame.text = extension['3'] if '3' in extension else " "
+    present_participle.text_frame.text = extension['present_participle']  if 'present_participle' in extension else " "
+    past_participle.text_frame.text = extension['past_participle'] if 'past_participle' in extension else " "
+
+    examples = json.loads(v["examples"])
+    if len(examples) >= 1:
+      original, translated = holders[18], holders[19]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+    if len(examples) >= 2:
+      original, translated = holders[20], holders[21]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+ 
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+  def create_verb_with_examples(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Verb with examples")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, verb, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = v['dict_pos']
+    verb.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+
+    meaning.text_frame.text = "\n".join(ms)
+
+    examples = json.loads(v["examples"])
+    if len(examples) >= 1:
+      original, translated = holders[13], holders[14]
+      ex = examples[0]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+    if len(examples) >= 2:
+      original, translated = holders[15], holders[16]
+      ex = examples[1]
+      original.text_frame.text = ex["original"]
+      translated.text_frame.text = ex["translated"]
+ 
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+
+
+  def create_verb_with_extension(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Verb with extension")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, verb, meaning = holders[10], holders[11], holders[12]
+    description = ""
+    if v["variations"]:
+      variations = json.loads(v["variations"])
+      description = " ".join([EnglishVocabMeta.format_info[e] for e in variations["formats"]])
+    pos.text_frame.text = " ".join([v["dict_pos"], description])
+    verb.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+
+    meaning.text_frame.text = "\n".join(ms)
+
+    original, past_tense, present_participle, past_participle, third = holders[13], holders[14], holders[15], holders[16], holders[17]
+    extension = json.loads(v["extension"])
+
+    original.text_frame.text = extension['original'] if 'original' in extension else " "
+    past_tense.text_frame.text = extension['past_tense'] if 'past_tense' in extension else " "
+    third.text_frame.text = extension['3'] if '3' in extension else " "
+    present_participle.text_frame.text = extension['present_participle']  if 'present_participle' in extension else " "
+    past_participle.text_frame.text = extension['past_participle'] if 'past_participle' in extension else " "
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
+
+
+  def create_default_verb(self, v):
+    layout = self.prs.slide_layouts.get_by_name("Default adjective")
+    slide = self.prs.slides.add_slide(layout)
+    holders = slide.shapes.placeholders
+
+    pos, verb, meaning = holders[10], holders[11], holders[12]
+    pos.text_frame.text = v["dict_pos"] 
+
+    verb.text_frame.text = v["word"]
+    ms = v["meaning"].split(",")
+    if len(ms) > 4:
+      ms = ms[:4]
+
+    meaning.text_frame.text = "\n".join(ms)
+
+    note = slide.notes_slide
+    note.notes_text_frame.text = v["word"]
+
+
 
   def create_verb_word(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Original verb vocab")
-    slide = self.prs.slides.add_slide(layout)
-    holders = slide.shapes.placeholders
-    
-    word, meaning = holders[11], holders[12]
-    word.text_frame.text = v["word"]
-
-    ms = v["meaning"].split(",")
-    if len(ms) > 4:
-      ms = ms[:4]
-
-    meaning.text_frame.text = "\n".join(ms)
- 
-    if v["examples"] != "":
-      examples = json.loads(v["examples"])
-      if len(examples) == 2:
-        original, translated = holders[14], holders[15]
-        ex = examples[0]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
-        original, translated = holders[16], holders[17]
-        ex = examples[1]
-        original.text_frame.text = ex["original"]
-        translated.text_frame.text = ex["translated"]
-
- 
-    note = slide.notes_slide
-    note.notes_text_frame.text = v["word"]
+    extension, variations, examples = v["extension"], v["variations"], v["examples"]
+    if extension != "" and variations != "" and examples != "[]":
+      self.create_rich_verb(v)
+    elif extension != "" and examples == "[]":
+      self.create_verb_with_extension(v)
+    elif extension == "" and examples != "[]":
+      self.create_verb_with_examples(v)
+    else:
+      self.create_default_verb(v)
 
   def create_vocab_group(self, vocabs):
     for v in vocabs:
       pos = v["dict_pos"]
-      if pos in EnglishVocabMeta.pos_info['noun'][2] and v['extension'] != '' and v['examples'] != '[]':
+      if pos in EnglishVocabMeta.pos_info['noun'][2]:
         self.create_noun_word(v) 
-      elif pos in EnglishVocabMeta.pos_info['adj'][2] and v['extension'] != '' and v['examples'] != '[]':
+      elif pos in EnglishVocabMeta.pos_info['adj'][2]:
         self.create_adj_word(v)
-      elif pos in EnglishVocabMeta.pos_info['verb'][2] and v['examples'] != '[]':
+      elif pos in EnglishVocabMeta.pos_info['verb'][2]:
         self.create_verb_word(v)
-      elif v['examples'] != '[]':
-        self.create_default_word(v)
       else:
         pass
         #self.create_default_word(v)
@@ -412,7 +548,7 @@ class EnglishVocabPPT(PPT):
       if index < 3 and len(ws) > 0:
         subtitle = EnglishVocabMeta.pos_info[pos][0]
         title = EnglishVocabMeta.pos_info[pos][1].upper()
-        self.create_vocab_title(index+1, title, subtitle)
+        self.create_vocab_title(pos, title, subtitle)
         self.create_vocab_group(ws)
 
   def create_ending(self):
