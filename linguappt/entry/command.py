@@ -13,12 +13,20 @@ def print_version(ctx, param, value):
 @click.command()
 @click.option("--sourcecsv", prompt="source csv file path", help="Specify the source csv file path")
 @click.option("--title", prompt="title of the pptx", help="Specify the title of the pptx")
+@click.option("--lang", prompt="language", help="Specify the language")
 @click.option("--destpptx", default="test.pptx", prompt="destination pptx file", help="Specify the destination pptx file name")
-def vocab_csv2ppt(sourcecsv, title, destpptx):
+def vocab_csv2ppt(sourcecsv, title, lang, destpptx):
+  _PPTS = {
+    "en": EnglishVocabPPT,
+    "es": SpanishVocabPPT
+  }
+
+  _PPT = _PPTS[lang]
+
   phase = {"step": 1, "msg": "Start ppt generation"}
   print(json.dumps(phase))
 
-  vp = SpanishVocabPPT(sourcecsv, title)
+  vp = _PPT(sourcecsv, title)
   vp.convert_to_ppt(destpptx)
 
   phase = {"step": 2, "msg": "Finish ppt generation"}

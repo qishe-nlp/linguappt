@@ -2,3 +2,4 @@ here*
 __pycache__
 *.pyc
 dist
+/*.pptx
