@@ -16,10 +16,13 @@ pytest = "^5.2"
 [tool.poetry.scripts]
 pptx_validate = 'linguappt.entry.validation:validate'
 play_template = 'linguappt.entry.usage:test_template_usage'
-vocab_csv2ppt = "linguappt.entry.command:vocab_csv2ppt"
-ppt2pdf = 'linguappt.entry.command:ppt2pdf'
-vocab_csv2pptpdf = "linguappt.entry.command:vocab_csv2pptpdf"
 
+lingua_vocabppt = 'linguappt.entry.command:vocabppt'
+lingua_phraseppt = 'linguappt.entry.command:phraseppt'
+
+lingua_pptx2pdf2images = 'linguappt.entry.command:pptx2pdf2images'
+
+lingua_csv2media = "linguappt.entry.command:csv2media"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

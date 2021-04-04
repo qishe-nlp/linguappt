@@ -2,10 +2,10 @@ from linguappt.phrase_ppt import PhrasePPT
 import os
 import json
 
-class EnglishPhrasePPT(PhrasePPT):
+class SpanishPhrasePPT(PhrasePPT):
   template_dir = os.path.dirname(__file__)
   templates = {
-    "classic": os.path.join(template_dir, 'templates/phrase_english_classic.pptx'),
+    "classic": os.path.join(template_dir, 'templates/phrase_spanish_classic.pptx'),
   }
   lang = 'en'
 
@@ -75,7 +75,7 @@ class EnglishPhrasePPT(PhrasePPT):
 
       verb_holder.text_frame.text = v["text"]
       origin_holder.text_frame.text = v["lemma"]
-      form_holder.text_frame.text = v["form"].split(",")[1]
+      form_holder.text_frame.text = v["form"]
  
   def _create_phrase(self):
     """Create phrase by sentence, which are noun phrases, prep phrases, verb phrases

@@ -11,7 +11,7 @@ class EnglishVocabPPT(VocabPPT):
   }
   lang = 'en'
 
-  content_keys = ['num', 'word', 'pos', 'meaning', 'dict_pos', 'from', 'extension', 'variations', 'examples']
+  content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations', 'examples']
 
   metainfo = EnglishVocabMeta
 

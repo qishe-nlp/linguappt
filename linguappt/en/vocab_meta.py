@@ -20,7 +20,7 @@ class EnglishVocabMeta:
   pos_info = {
     'noun': ('名词', 'noun', ['n.']),
     'adj': ('形容词', 'adjective', ['adj.']),
-    'verb': ('动词', 'verb', ['v.', 'vt.vi.', 'vi.', 'vt.', 'aux.', 'vi.vt.']),
+    'verb': ('动词', 'verb', ['v.', 'vt.vi.', 'v.vi.', 'v.vt.', 'v.aux.', 'vi.vt.']),
     'adv': ('副词', 'adverb', ['adv.']),
     'pron': ('代词', 'pronoun', ['pron.']),
     'prep': ('前置词', '', ['prep.']),

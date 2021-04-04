@@ -3,7 +3,7 @@
 ### Install from pip3
 
 ```
-pip3 install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple --verbose linguappt 
+pip3 install --verbose linguappt 
 ```
 
 ### Execute usage
@@ -15,55 +15,22 @@ pptx_validate --pptx [pptx file]
 
 * Convert vocabulary csv file into ppt file
 ```
-vocab_csv2ppt --sourcecsv [vocab csv file] --title [title shown in ppt] --destpptx [pptx file]
+lingua_vocabppt --sourcecsv [vocab csv file] --lang [language] --title [title shown in ppt] --destpptx [pptx file]
 ```
+
+* Convert phrase csv file into ppt file
+```
+lingua_vocabppt --sourcecsv [phrase csv file] --lang [language] --title [title shown in ppt] --destpptx [pptx file]
+```
+
 
 * Convert ppt into pdf
 ```
-ppt2pdf --sourcepptx [pptx file] --destdir [dest directory storing pdf and images]
-```
-
-Generate pptx from csv which contains vocabulary information 
-```
-vocab_csv2pptpdf --sourcecsv [vocab csv file] --name [name of ppt pdf img] --pptxdir [pptx directory] --pdfdir [pdf directory] --imgdir [image directory]
+lingua_pptx2pdf --sourcepptx [pptx file] --destdir [dest directory storing pdf and images]
 ```
 
 ### Package usage
 ```
-from linguappt import SpanishVocabPPT, Pdf
-import os
-
-def vocab_csv2pptpdf(sourcecsv, name, pptxdir, pdfdir, imgdir):
-
-  pptx_pro_dir = pptxdir + '/pro/' 
-  pptx_water_dir = pptxdir + '/water/' 
-
-  if not os.path.isdir(pptxdir):
-    os.mkdir(pptxdir) 
-
-  if not os.path.isdir(pptx_pro_dir):
-    os.mkdir(pptx_pro_dir) 
-
-  if not os.path.isdir(pptx_water_dir):
-    os.mkdir(pptx_water_dir) 
-
-  vp = SpanishVocabPPT(sourcecsv, "歧舌AI备课助教")
-  pptx = pptx_pro_dir + name +'.pptx'
-  vp.convert_to_ppt(pptx)
-
-  vp = SpanishVocabPPT(sourcecsv, "歧舌AI备课助教", "watermark")
-  watermark_pptx = pptx_water_dir + name + ".pptx"
-  vp.convert_to_ppt(watermark_pptx)
-
-  if not os.path.isdir(pdfdir):
-    os.mkdir(pdfdir) 
-
-  pdf_pro_dir = pdfdir + '/pro/'
-  pdf_water_dir = pdfdir + '/water/'
-  pdf = Pdf(pptx, pdf_pro_dir)
-  watermark_pdf = Pdf(watermark_pptx, pdf_water_dir)
-
-  images_len = pdf.save_as_images(0, 6, imgdir)
 ```
 
 # Development
@@ -80,6 +47,13 @@ git clone https://github.com/qishe-nlp/linguappt.git
 poetry update
 ```
 
+### Test
+```
+poetry run pytest -rP
+```
+which run tests under `tests/*`
+
+
 ### Execute
 ```
 poetry run pptx_validate --help
@@ -88,20 +62,37 @@ poetry run ppt2pdf --help
 poetry run vocab_csv2pptpdf --help
 ```
 
+### Create sphinx docs
+```
+poetry shell
+cd apidocs
+sphinx-apidoc -f -o source ../subtitlecore
+make html
+python -m http.server -d build/html
+```
+
+### Host docs on github pages
+```
+cp -rf apidocs/build/html/* docs/
+```
+
 ### Build
 * Change `version` in `pyproject.toml` and `linguappt/__init__.py`
 * Build python package by `poetry build`
 
-### Publish
+### Git commit and push
+
+### Publish from local dev env
 * Set pypi test environment variables in poetry, refer to [poetry doc](https://python-poetry.org/docs/repositories/)
 * Publish to pypi test by `poetry publish -r test`
 
+### Publish through CI 
+* Github action build and publish package to [test pypi repo](https://test.pypi.org/)
 
-# TODO
+```
+git tag [x.x.x]
+git push origin master
+```
 
-### Test and Issue
-* `tests/*`
+* Manually publish to [pypi repo](https://pypi.org/) through [github action](https://github.com/qishe-nlp/linguappt/actions/workflows/pypi.yml)
 
-### Github action to publish package
-* pypi test repo
-* pypi repo
