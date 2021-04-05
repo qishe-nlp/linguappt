@@ -1,5 +1,5 @@
 from pptx import Presentation
-from linguappt.filereader import readCSV
+from linguappt.lib import readCSV
 import json
 
 class VocabPPT:

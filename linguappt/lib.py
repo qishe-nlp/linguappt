@@ -1,6 +1,13 @@
 from pdf2image import convert_from_path
 from subprocess import call, DEVNULL
 import os
+import csv
+
+def readCSV(filename):
+  with open(filename) as csvfile:
+    cursor = csv.reader(csvfile, skipinitialspace=True, delimiter='\t')
+    header = next(cursor)
+    return [dict(zip(header, row)) for row in cursor]
 
 def pptx2pdf(pptx, pdffolder='./'):
   if not os.path.isdir(pdffolder):

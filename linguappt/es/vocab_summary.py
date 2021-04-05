@@ -1,11 +1,6 @@
 from linguappt.vocab_ppt import VocabPPT
-from linguappt.filereader import readCSV
 from linguappt.es.vocab_meta import SpanishVocabMeta
-from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.dml.color import RGBColor
 import os
-import math
 import json
 
 class SpanishVocabPPT(VocabPPT):
