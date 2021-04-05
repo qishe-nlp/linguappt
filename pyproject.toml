@@ -1,8 +1,13 @@
 [tool.poetry]
 name = "linguappt"
-version = "0.1.5"
-description = ""
+version = "0.1.6"
+description = "PPT generator for language learning"
 authors = ["Phoenix Grey <phoenix.grey0108@gmail.com>"]
+repository = "https://github.com/qishe-nlp/linguappt"
+readme = "README.md"
+documentation = "https://qishe-nlp.github.io/linguappt/"
+keywords = ["ppt", "language", "auto"] 
+
 
 [tool.poetry.dependencies]
 python = "^3.8"

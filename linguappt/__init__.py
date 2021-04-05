@@ -54,7 +54,7 @@ This module demostrates the usage of package `linguappt`.
 
 """
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 
 from .es.vocab_summary import SpanishVocabPPT
