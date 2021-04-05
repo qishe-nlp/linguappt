@@ -1,10 +1,12 @@
-# Usage
-
-### Install from pip3
+# Installation
 
 ```
 pip3 install --verbose linguappt 
 ```
+
+# Usage
+
+Please refer to [api docs](https://qishe-nlp.github.io/linguappt/).
 
 ### Execute usage
 
