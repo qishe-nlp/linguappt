@@ -1,0 +1,37 @@
+linguappt.entry package
+=======================
+
+Submodules
+----------
+
+linguappt.entry.command module
+------------------------------
+
+.. automodule:: linguappt.entry.command
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+linguappt.entry.usage module
+----------------------------
+
+.. automodule:: linguappt.entry.usage
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+linguappt.entry.validation module
+---------------------------------
+
+.. automodule:: linguappt.entry.validation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: linguappt.entry
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -4,35 +4,31 @@ import os
 import json
 
 class SpanishVocabPPT(VocabPPT):
+  """Create Vocabulary PPT for Spanish study
 
-  template_dir = os.path.dirname(__file__)
-  templates = {
-    "classic": os.path.join(template_dir, 'templates/vocab_spanish_classic.pptx'),
-    "watermark": os.path.join(template_dir, 'templates/vocab_spanish_watermark.pptx')
+  Attributes:
+    content (list of dict): read from csv file
+    word_distrubtion (dict): key is PoS, e.g, ``noun``, ``verb``, ``daj``, value is list of vocabularies
+  """
+
+  _template_dir = os.path.dirname(__file__)
+  _templates = {
+    "classic": os.path.join(_template_dir, 'templates/vocab_spanish_classic.pptx'),
   }
   lang = 'es'
 
   content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations']
 
-  metainfo = SpanishVocabMeta
+  _metainfo = SpanishVocabMeta
 
   ALLOWED_POSES = ['noun', 'adj', 'verb']
 
   def __init__(self, sourcefile, title="", genre="classic"):
-    """
-    word_distribution is a dict
-    e.g,
-    word_distribution = {
-      "noun": [],
-      "verb": [],
-      "adj": []
-    }
-    """
     super().__init__(sourcefile, title, genre)
 
   def _create_noun_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Noun with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
     pos = v["dict_pos"]
@@ -52,7 +48,7 @@ class SpanishVocabPPT(VocabPPT):
     pl_def = holders[17]
     pl_undef = holders[19]
 
-    arts = self.__class__.metainfo.article_variation[pos]
+    arts = self.__class__._metainfo.article_variation[pos]
 
     s_def.text_frame.text = arts[0] 
     s_undef.text_frame.text = arts[1]
@@ -80,8 +76,8 @@ class SpanishVocabPPT(VocabPPT):
       self._create_default_word(v)
 
   def _create_adj_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Adj with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Adj with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
     pos_holder = holders[10]
@@ -112,8 +108,8 @@ class SpanishVocabPPT(VocabPPT):
       self._create_default_word(v)
 
   def _create_verb_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Verb with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
     variations = json.loads(v["variations"])
@@ -144,7 +140,7 @@ class SpanishVocabPPT(VocabPPT):
     holders[18].text_frame.text = extension["vosotros"]
     holders[19].text_frame.text = extension["ellos/ellas/Ustedes"]
 
-    holders[20].text_frame.text = self.__class__.metainfo.tense_info[tense]
+    holders[20].text_frame.text = self.__class__._metainfo.tense_info[tense]
     holders[21].text_frame.text = " ".join(["人称", person, "的变位"])
 
     note = slide.notes_slide
@@ -152,8 +148,8 @@ class SpanishVocabPPT(VocabPPT):
 
 
   def _create_verb_with_extension_B(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb with extension B")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Verb with extension B")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
     variations = json.loads(v["variations"])
@@ -172,15 +168,15 @@ class SpanishVocabPPT(VocabPPT):
     meaning.text_frame.text = "\n".join(ms)
  
     formats = variations["formats"]
-    holders[14].text_frame.text = "\n".join([self.__class__.metainfo.tense_info[f["tense"]] if "tense" in f.keys() else self.__class__.metainfo.tense_info[f["format"]] for f in formats])
+    holders[14].text_frame.text = "\n".join([self.__class__._metainfo.tense_info[f["tense"]] if "tense" in f.keys() else self.__class__._metainfo.tense_info[f["format"]] for f in formats])
     holders[15].text_frame.text = "\n".join([" ".join([f["person"], "的变位"]) if "person" in f.keys() else "" for f in formats])
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]
 
   def _create_verb_with_extension_C(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb with extension C")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Verb with extension C")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
     
     variations = json.loads(v["variations"])
@@ -199,7 +195,7 @@ class SpanishVocabPPT(VocabPPT):
  
     sign = variations["formats"][0]
 
-    holders[14].text_frame.text = self.__class__.metainfo.tense_info[sign["format"]]
+    holders[14].text_frame.text = self.__class__._metainfo.tense_info[sign["format"]]
 
     note = slide.notes_slide
     note.notes_text_frame.text = v["word"]

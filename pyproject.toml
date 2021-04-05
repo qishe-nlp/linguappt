@@ -9,20 +9,21 @@ python = "^3.8"
 python-pptx = "^0.6.18"
 pdf2image = "^1.12.1"
 click = "^7.1.1"
+sphinx-rtd-theme = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+Sphinx = "^3.5.3"
 
 [tool.poetry.scripts]
-pptx_validate = 'linguappt.entry.validation:validate'
-play_template = 'linguappt.entry.usage:test_template_usage'
+lingua_pptx_validate = 'linguappt.entry.validation:validate'
 
-lingua_vocabppt = 'linguappt.entry.command:vocabppt'
-lingua_phraseppt = 'linguappt.entry.command:phraseppt'
+lingua_vocabppt = 'linguappt._entry.command:vocabppt'
+lingua_phraseppt = 'linguappt._entry.command:phraseppt'
 
-lingua_pptx2pdf2images = 'linguappt.entry.command:pptx2pdf2images'
+lingua_pptx2pdf2images = 'linguappt._entry.command:pptx2pdf2images'
 
-lingua_csv2media = "linguappt.entry.command:csv2media"
+lingua_csv2media = "linguappt._entry.command:csv2media"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

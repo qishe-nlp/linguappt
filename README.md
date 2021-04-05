@@ -20,7 +20,7 @@ lingua_vocabppt --sourcecsv [vocab csv file] --lang [language] --title [title sh
 
 * Convert phrase csv file into ppt file
 ```
-lingua_vocabppt --sourcecsv [phrase csv file] --lang [language] --title [title shown in ppt] --destpptx [pptx file]
+lingua_phraseppt --sourcecsv [phrase csv file] --lang [language] --title [title shown in ppt] --destpptx [pptx file]
 ```
 
 
@@ -31,6 +31,32 @@ lingua_pptx2pdf --sourcepptx [pptx file] --destdir [dest directory storing pdf a
 
 ### Package usage
 ```
+from linguappt import SpanishVocabPPT, EnglishVocabPPT
+from linguappt import EnglishPhrasePPT, SpanishPhrasePPT
+
+def vocabppt(sourcecsv, title, lang, destpptx):
+  _PPTS = {
+    "en": EnglishVocabPPT,
+    "es": SpanishVocabPPT
+  }
+
+  _PPT = _PPTS[lang]
+
+  vp = _PPT(sourcecsv, title)
+  vp.convert_to_ppt(destpptx)
+
+def phraseppt(sourcecsv, title, lang, destpptx):
+  _PPTS = {
+    "en": EnglishPhrasePPT,
+    "es": SpanishPhrasePPT
+  }
+
+  _PPT = _PPTS[lang]
+
+  vp = _PPT(sourcecsv, title)
+  vp.convert_to_ppt(destpptx)
+
+
 ```
 
 # Development
@@ -49,7 +75,7 @@ poetry update
 
 ### Test
 ```
-poetry run pytest -rP
+poetry run pytest -rP --capture=sys
 ```
 which run tests under `tests/*`
 

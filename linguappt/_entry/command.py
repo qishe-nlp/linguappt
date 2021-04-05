@@ -5,7 +5,7 @@ import click
 import json
 import os
  
-def print_version(ctx, param, value):
+def _print_version(ctx, param, value):
   if not value or ctx.resilient_parsing:
       return
   click.echo(__version__)
@@ -73,14 +73,14 @@ def pptx2pdf2images(sourcepptx, destdir):
   phase = {"step": 3, "msg": "Start images generation"}
   print(json.dumps(phase))
 
-  images_len = pdf2images(pdf, destdir, 4, 4+6)
+  images_len = pdf2images(pdf, destdir)
    
   phase = {"step": 4, "msg": "Finish images generation", "images_len": images_len}
   print(json.dumps(phase))
 
 
 @click.command()
-@click.option('--version', is_flag=True, callback=print_version, expose_value=False, is_eager=True)
+@click.option('--version', is_flag=True, callback=_print_version, expose_value=False, is_eager=True)
 @click.option('--ptype', prompt="parser type[VOCAB | PHRASE]", help="Specify the parse type, VOCAB or PHRASE")
 @click.option("--sourcecsv", prompt="source csv file path", help="Specify the source csv file path")
 @click.option("--lang", prompt="language", help="Specify the language")

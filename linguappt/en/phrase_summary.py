@@ -3,9 +3,15 @@ import os
 import json
 
 class EnglishPhrasePPT(PhrasePPT):
-  template_dir = os.path.dirname(__file__)
-  templates = {
-    "classic": os.path.join(template_dir, 'templates/phrase_english_classic.pptx'),
+  """Create Phrase PPT for English study
+
+  Attributes:
+    content (list of dict): read from csv file
+  """
+
+  _template_dir = os.path.dirname(__file__)
+  _templates = {
+    "classic": os.path.join(_template_dir, 'templates/phrase_english_classic.pptx'),
   }
   lang = 'en'
 
@@ -20,8 +26,8 @@ class EnglishPhrasePPT(PhrasePPT):
     pps_obj = json.loads(line["prep_phrases"])[:3]
     #vps_obj = json.loads(line["verb_phrases"])[:3]
 
-    layout = self.prs.slide_layouts.get_by_name("Three kinds of phrase")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Three kinds of phrase")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
   
     st_holder, sm_holder = holders[10], holders[11]
@@ -54,8 +60,8 @@ class EnglishPhrasePPT(PhrasePPT):
     ps_obj = nps_obj + pps_obj
     vs_obj = json.loads(line["verbs"])[:4]
 
-    layout = self.prs.slide_layouts.get_by_name("Phrase and verb")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Phrase and verb")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
   
     st_holder, sm_holder = holders[10], holders[11]

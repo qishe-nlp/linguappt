@@ -1,41 +1,37 @@
 from linguappt.vocab_ppt import VocabPPT
-from linguappt.en.vocab_meta import EnglishVocabMeta
+from linguappt.en._vocab_meta import _EnglishVocabMeta
 import os
 import json
 
 class EnglishVocabPPT(VocabPPT):
+  """Create Vocabulary PPT for English study
 
-  template_dir = os.path.dirname(__file__)
-  templates = {
-    "classic": os.path.join(template_dir, 'templates/vocab_english_classic.pptx'),
+  Attributes:
+    content (list of dict): read from csv file
+    word_distrubtion (dict): key is PoS, e.g, ``noun``, ``verb``, ``daj``, value is list of vocabularies
+  """
+
+  _template_dir = os.path.dirname(__file__)
+  _templates = {
+    "classic": os.path.join(_template_dir, 'templates/vocab_english_classic.pptx'),
   }
   lang = 'en'
 
   content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations', 'examples']
 
-  metainfo = EnglishVocabMeta
+  _metainfo = _EnglishVocabMeta
 
   ALLOWED_POSES = ['noun', 'adj', 'verb']
 
   def __init__(self, sourcefile, title="", genre="classic"):
-    """
-    word_distribution is a dict
-    e.g,
-    word_distribution = {
-      "noun": [],
-      "verb": [],
-      "adj": []
-    }
-    """
-
     super().__init__(sourcefile, title, genre)
 
   def _create_noun_with_extension_B(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun with extension B")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Noun with extension B")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, noun, meaning = holders[10], holders[11], holders[12]
     description = format_info["singular"]
@@ -71,11 +67,11 @@ class EnglishVocabPPT(VocabPPT):
     note.notes_text_frame.text = v["word"]
 
   def _create_noun_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Noun with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Noun with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, noun, meaning = holders[10], holders[11], holders[12]
     description = format_info["singular"]
@@ -110,11 +106,11 @@ class EnglishVocabPPT(VocabPPT):
       self._create_default_word(v)
 
   def _create_adj_with_extension_B(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Adj with extension B")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Adj with extension B")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, adj, meaning = holders[10], holders[11], holders[12]
     description = ""
@@ -153,11 +149,11 @@ class EnglishVocabPPT(VocabPPT):
 
 
   def _create_adj_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Adj with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Adj with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, adj, meaning = holders[10], holders[11], holders[12]
     description = ""
@@ -195,11 +191,11 @@ class EnglishVocabPPT(VocabPPT):
       self._create_default_word(v)
 
   def _create_verb_with_extension_B(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb with extension B")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Verb with extension B")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, verb, meaning = holders[10], holders[11], holders[12]
     description = ""
@@ -239,11 +235,11 @@ class EnglishVocabPPT(VocabPPT):
     note.notes_text_frame.text = v["word"]
 
   def _create_verb_with_extension_A(self, v):
-    layout = self.prs.slide_layouts.get_by_name("Verb with extension A")
-    slide = self.prs.slides.add_slide(layout)
+    layout = self._prs.slide_layouts.get_by_name("Verb with extension A")
+    slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
 
-    format_info = self.__class__.metainfo.format_info
+    format_info = self.__class__._metainfo.format_info
 
     pos, verb, meaning = holders[10], holders[11], holders[12]
     description = ""

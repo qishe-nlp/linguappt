@@ -6,7 +6,7 @@ import os
 import click
 
 # TODO : may need to be updated
-def test_template_usage():
+def _test_template_usage():
   template_to_be_tested = './linguappt/es/templates/vocab_spanish_classic.pptx'
   prs = Presentation(template_to_be_tested)
   templates = prs.slide_layouts
@@ -83,7 +83,7 @@ def test_template_usage():
 
   prs.save('test.pptx')
 
-def default():
+def _default():
   prs = Presentation()
   blank_slide_layout = prs.slide_layouts[6]
   slide = prs.slides.add_slide(blank_slide_layout)

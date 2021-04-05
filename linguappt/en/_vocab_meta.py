@@ -1,4 +1,4 @@
-class EnglishVocabMeta:
+class _EnglishVocabMeta:
 
   @classmethod
   def get_pos(cls, dict_pos):
