@@ -17,7 +17,7 @@ class SpanishVocabPPT(VocabPPT):
   }
   lang = 'es'
 
-  content_keys = ['num', 'word', 'pos', 'meaning', 'dict_pos', 'from', 'extension', 'variations']
+  content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations']
 
   metainfo = SpanishVocabMeta
 
