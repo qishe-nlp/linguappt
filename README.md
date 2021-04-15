@@ -94,7 +94,7 @@ poetry run vocab_csv2pptpdf --help
 ```
 poetry shell
 cd apidocs
-sphinx-apidoc -f -o source ../subtitlecore
+sphinx-apidoc -f -o source ../linguappt
 make html
 python -m http.server -d build/html
 ```
