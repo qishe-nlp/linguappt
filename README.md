@@ -84,10 +84,12 @@ which run tests under `tests/*`
 
 ### Execute
 ```
-poetry run pptx_validate --help
-poetry run vocab_csv2ppt --help
-poetry run ppt2pdf --help
-poetry run vocab_csv2pptpdf --help
+poetry run lingua_pptx_validate --help
+poetry run lingua_vocabppt --help
+poetry run lingua_phraseppt --help
+
+poetry run lingua_pptx2pdf2images --help
+poetry run lingua_csv2media --help
 ```
 
 ### Create sphinx docs
