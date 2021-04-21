@@ -121,8 +121,6 @@ class VocabPPT:
     title.text_frame.text = title_content
     subtitle = holders[11]
     subtitle.text_frame.text = subtitle_content
-    note = slide.notes_slide
-    note.notes_text_frame.text = title_content.lower()
 
   def _create_default_word(self, v):
     """Create default vocabulary slide, displaying word and its meaning
