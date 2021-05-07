@@ -12,7 +12,7 @@ Please refer to [api docs](https://qishe-nlp.github.io/linguappt/).
 
 * Validate ppt template
 ```
-pptx_validate --pptx [pptx file]
+lingua_pptx_validate --pptx [pptx file]
 ```
 
 * Convert vocabulary csv file into ppt file
