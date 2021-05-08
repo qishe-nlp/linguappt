@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "linguappt"
-version = "0.1.9"
+version = "0.1.10"
 description = "PPT generator for language learning"
 authors = ["Phoenix Grey <phoenix.grey0108@gmail.com>"]
 repository = "https://github.com/qishe-nlp/linguappt"
@@ -21,7 +21,7 @@ Sphinx = "^3.5.3"
 sphinx-rtd-theme = "^0.5.2"
 
 [tool.poetry.scripts]
-lingua_pptx_validate = 'linguappt.entry.validation:validate'
+lingua_pptx_validate = 'linguappt._entry.validation:validate'
 
 lingua_vocabppt = 'linguappt._entry.command:vocabppt'
 lingua_phraseppt = 'linguappt._entry.command:phraseppt'
