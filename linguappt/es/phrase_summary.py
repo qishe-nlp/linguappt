@@ -14,7 +14,7 @@ class SpanishPhrasePPT(PhrasePPT):
   _templates = {
     "classic": os.path.join(_template_dir, 'templates/phrase_spanish_classic.pptx'),
   }
-  lang = 'en'
+  lang = 'es'
 
   content_keys = ["sentence", "noun_phrases", "prep_phrases", "verb_phrases", "verbs"]
 
