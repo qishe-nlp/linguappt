@@ -17,7 +17,7 @@ class SpanishVocabPPT(VocabPPT):
   }
   lang = 'es'
 
-  content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations']
+  content_keys = ['word', 'meaning', 'dict_pos', 'from', 'extension', 'variations', 'examples']
 
   _metainfo = SpanishVocabMeta
 
@@ -117,8 +117,8 @@ class SpanishVocabPPT(VocabPPT):
     pos_holder = holders[10]
     pos_holder.text_frame.text = v["dict_pos"]
 
-    origin, word, meaning = holders[11], holders[12], holders[13]
-    origin.text_frame.text = variations["origin"]
+    original, word, meaning = holders[11], holders[12], holders[13]
+    original.text_frame.text = variations["original"]
     word.text_frame.text = v["word"]
 
     ms = v["meaning"].split(",")
@@ -183,8 +183,8 @@ class SpanishVocabPPT(VocabPPT):
 
     pos_holder = holders[10]
     pos_holder.text_frame.text = v["dict_pos"]
-    origin, word, meaning = holders[11], holders[12], holders[13]
-    origin.text_frame.text = variations["origin"]
+    original, word, meaning = holders[11], holders[12], holders[13]
+    original.text_frame.text = variations["original"]
     word.text_frame.text = v["word"]
 
     ms = v["meaning"].split(",")
