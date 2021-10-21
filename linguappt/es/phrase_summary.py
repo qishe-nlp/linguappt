@@ -16,7 +16,7 @@ class SpanishPhrasePPT(PhrasePPT):
   }
   lang = 'es'
 
-  content_keys = ["sentence", "noun_phrases", "verb_phrases", "verbs"]
+  content_keys = ["sentence", "noun_phrases", "verbs"]
 
   def __init__(self, sourcefile, title="", genre="classic"):
     super().__init__(sourcefile, title, genre)
