@@ -1,4 +1,4 @@
-from linguappt import SpanishVocabPPT, EnglishVocabPPT, EnglishPhrasePPT, SpanishPhrasePPT, EnglishStructureKGPPT
+from linguappt import SpanishVocabPPT, EnglishVocabPPT, EnglishPhrasePPT, SpanishPhrasePPT, EnglishStructureKGPPT, SpanishStructureKGPPT
 from linguappt.lib import pptx2pdf, pdf2images 
 from linguappt import __version__
 import click
@@ -64,7 +64,7 @@ def phraseppt(sourcecsv, title, lang, destpptx):
 def structurekgppt(sourcejson, title, lang, destpptx):
   _PPTS = {
     "en": EnglishStructureKGPPT,
-    #"es": SpanishPhrasePPT
+    "es": SpanishStructureKGPPT
   }
 
   _PPT = _PPTS[lang]
@@ -118,7 +118,7 @@ def meta2media(ptype, sourcemeta, lang, name, pptxdir, pdfdir, imgdir):
     "en_PHRASE": EnglishPhrasePPT,
     "es_PHRASE": SpanishPhrasePPT,
     "en_SKG": EnglishStructureKGPPT,
-    #"es_SKG": SpanishStructureKGPPT,
+    "es_SKG": SpanishStructureKGPPT,
   }
 
   _PPT = _PPTS[lang+"_"+ptype]

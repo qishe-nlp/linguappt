@@ -12,6 +12,14 @@ linguappt.es.phrase\_summary module
    :undoc-members:
    :show-inheritance:
 
+linguappt.es.structure\_kg\_summary module
+------------------------------------------
+
+.. automodule:: linguappt.es.structure_kg_summary
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 linguappt.es.vocab\_meta module
 -------------------------------
 
