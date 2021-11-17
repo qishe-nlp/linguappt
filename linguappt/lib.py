@@ -3,6 +3,13 @@ from subprocess import call, DEVNULL
 import os
 import csv
 import sys
+import json
+
+def read_json(jsonfile):
+  data = []
+  with open(jsonfile) as f:
+    data = json.load(f)
+  return data
 
 def readCSV(filename):
   """Read csv file

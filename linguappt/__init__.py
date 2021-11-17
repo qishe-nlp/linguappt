@@ -54,10 +54,12 @@ This module demostrates the usage of package `linguappt`.
 
 """
 
-__version__ = '0.1.17'
+__version__ = '0.1.18'
 
 
 from .es.vocab_summary import SpanishVocabPPT
 from .en.vocab_summary import EnglishVocabPPT
 from .en.phrase_summary import EnglishPhrasePPT
 from .es.phrase_summary import SpanishPhrasePPT
+from .en.structure_kg_summary import EnglishStructureKGPPT
+#from .es.phrase_summary import SpanishPhrasePPT

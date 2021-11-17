@@ -29,6 +29,14 @@ linguappt.phrase\_ppt module
    :undoc-members:
    :show-inheritance:
 
+linguappt.structure\_kg\_ppt module
+-----------------------------------
+
+.. automodule:: linguappt.structure_kg_ppt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 linguappt.vocab\_ppt module
 ---------------------------
 

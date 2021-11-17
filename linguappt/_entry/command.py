@@ -1,4 +1,4 @@
-from linguappt import SpanishVocabPPT, EnglishVocabPPT, EnglishPhrasePPT, SpanishPhrasePPT
+from linguappt import SpanishVocabPPT, EnglishVocabPPT, EnglishPhrasePPT, SpanishPhrasePPT, EnglishStructureKGPPT
 from linguappt.lib import pptx2pdf, pdf2images 
 from linguappt import __version__
 import click
@@ -56,6 +56,29 @@ def phraseppt(sourcecsv, title, lang, destpptx):
   phase = {"step": 2, "msg": "Finish ppt generation"}
   print(json.dumps(phase))
 
+@click.command()
+@click.option("--sourcejson", prompt="source json file path", help="Specify the source json file path")
+@click.option("--title", prompt="title of the pptx", help="Specify the title of the pptx")
+@click.option("--lang", prompt="language", help="Specify the language")
+@click.option("--destpptx", default="test.pptx", prompt="destination pptx file", help="Specify the destination pptx file name")
+def structurekgppt(sourcejson, title, lang, destpptx):
+  _PPTS = {
+    "en": EnglishStructureKGPPT,
+    #"es": SpanishPhrasePPT
+  }
+
+  _PPT = _PPTS[lang]
+
+  phase = {"step": 1, "msg": "Start ppt generation"}
+  print(json.dumps(phase))
+
+  vp = _PPT(sourcejson, title)
+  vp.convert_to_ppt(destpptx)
+
+  phase = {"step": 2, "msg": "Finish ppt generation"}
+  print(json.dumps(phase))
+
+
 
 
 @click.command()
@@ -81,19 +104,21 @@ def pptx2pdf2images(sourcepptx, destdir):
 
 @click.command()
 @click.option('--version', is_flag=True, callback=_print_version, expose_value=False, is_eager=True)
-@click.option('--ptype', prompt="parser type[VOCAB | PHRASE]", help="Specify the parse type, VOCAB or PHRASE")
-@click.option("--sourcecsv", prompt="source csv file path", help="Specify the source csv file path")
+@click.option('--ptype', prompt="parser type[VOCAB | PHRASE | SKG]", help="Specify the parse type, VOCAB or PHRASE or SKG")
+@click.option("--sourcemeta", prompt="source meta file path", help="Specify the source meta file path")
 @click.option("--lang", prompt="language", help="Specify the language")
 @click.option("--name", default="test", prompt="output file name", help="Specify the file name")
 @click.option("--pptxdir", prompt="dest pptx directory", help="Specify the pptx destination directory")
 @click.option("--pdfdir", prompt="dest pdf directory", help="Sepcify the pdf destionation directory")
 @click.option("--imgdir", prompt="dest image directory", help="Sepcify the preview image destionation directory")
-def csv2media(ptype, sourcecsv, lang, name, pptxdir, pdfdir, imgdir):
+def meta2media(ptype, sourcemeta, lang, name, pptxdir, pdfdir, imgdir):
   _PPTS = {
     "en_VOCAB": EnglishVocabPPT,
     "es_VOCAB": SpanishVocabPPT,
     "en_PHRASE": EnglishPhrasePPT,
     "es_PHRASE": SpanishPhrasePPT,
+    "en_SKG": EnglishStructureKGPPT,
+    #"es_SKG": SpanishStructureKGPPT,
   }
 
   _PPT = _PPTS[lang+"_"+ptype]
@@ -103,7 +128,7 @@ def csv2media(ptype, sourcecsv, lang, name, pptxdir, pdfdir, imgdir):
   if not os.path.isdir(pptxdir):
     os.mkdir(pptxdir) 
 
-  vp = _PPT(sourcecsv, "歧舌AI备课助教")
+  vp = _PPT(sourcemeta, "歧舌AI备课助教")
   pptx = pptxdir + "/" + name +'.pptx'
   vp.convert_to_ppt(pptx)
 

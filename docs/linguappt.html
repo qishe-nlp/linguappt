@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>linguappt package &mdash; linguappt 0.1.17 documentation</title>
+  <title>linguappt package &mdash; linguappt 0.1.18 documentation</title>
   
 
   
@@ -96,6 +96,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-linguappt.lib">linguappt.lib module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-linguappt.phrase_ppt">linguappt.phrase_ppt module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-linguappt.structure_kg_ppt">linguappt.structure_kg_ppt module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-linguappt.vocab_ppt">linguappt.vocab_ppt module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-linguappt">Module contents</a></li>
 </ul>
@@ -180,6 +181,7 @@
 <li class="toctree-l1"><a class="reference internal" href="linguappt.en.html">linguappt.en package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="linguappt.en.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linguappt.en.html#module-linguappt.en.phrase_summary">linguappt.en.phrase_summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linguappt.en.html#module-linguappt.en.structure_kg_summary">linguappt.en.structure_kg_summary module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linguappt.en.html#module-linguappt.en.vocab_summary">linguappt.en.vocab_summary module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linguappt.en.html#module-linguappt.en">Module contents</a></li>
 </ul>
@@ -259,6 +261,11 @@
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="linguappt.lib.read_json">
+<code class="sig-prename descclassname"><span class="pre">linguappt.lib.</span></code><code class="sig-name descname"><span class="pre">read_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jsonfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linguappt.lib.read_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-linguappt.phrase_ppt">
 <span id="linguappt-phrase-ppt-module"></span><h2>linguappt.phrase_ppt module<a class="headerlink" href="#module-linguappt.phrase_ppt" title="Permalink to this headline">¶</a></h2>
@@ -282,6 +289,39 @@
 <dl class="py method">
 <dt id="linguappt.phrase_ppt.PhrasePPT.convert_to_ppt">
 <code class="sig-name descname"><span class="pre">convert_to_ppt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test.pptx'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linguappt.phrase_ppt.PhrasePPT.convert_to_ppt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert csv file containing vocabulary information into pptx file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>destfile</strong> (<em>str</em>) – pptx file path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-linguappt.structure_kg_ppt">
+<span id="linguappt-structure-kg-ppt-module"></span><h2>linguappt.structure_kg_ppt module<a class="headerlink" href="#module-linguappt.structure_kg_ppt" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="linguappt.structure_kg_ppt.StructureKGPPT">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">linguappt.structure_kg_ppt.</span></code><code class="sig-name descname"><span class="pre">StructureKGPPT</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sourcefile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'classic'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linguappt.structure_kg_ppt.StructureKGPPT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>It is designed as an abstract class to be inheritated for phrase ppt generation of different languages,</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>DON’T</strong> use this class directly. To define a StructureKGPPT for a lanugage</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Define subclass inheriting <code class="docutils literal notranslate"><span class="pre">StructureKGPPT</span></code>, e.g, <code class="docutils literal notranslate"><span class="pre">ChineseStructureKGPPT</span></code></p></li>
+<li><p>Define class variable <code class="docutils literal notranslate"><span class="pre">_templates</span></code>, which is a <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code>, key is template genre, value is template path</p></li>
+<li><p>Define class varibale <code class="docutils literal notranslate"><span class="pre">content_keys</span></code>, which is a <code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code>, containing the heads in csv file</p></li>
+<li><p>Implement method <code class="docutils literal notranslate"><span class="pre">_create_structure_kg(self)</span></code></p></li>
+</ol>
+</div></blockquote>
+</div>
+<dl class="py method">
+<dt id="linguappt.structure_kg_ppt.StructureKGPPT.convert_to_ppt">
+<code class="sig-name descname"><span class="pre">convert_to_ppt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test.pptx'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#linguappt.structure_kg_ppt.StructureKGPPT.convert_to_ppt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert csv file containing vocabulary information into pptx file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

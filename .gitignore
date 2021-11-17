@@ -5,3 +5,4 @@ dist
 /*.pptx
 /*.csv
 apidocs/build
+*.json
