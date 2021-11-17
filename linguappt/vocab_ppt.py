@@ -75,7 +75,7 @@ class VocabPPT:
     """Create home slide
     """
 
-    layout = self._prs.slide_layouts.get_by_name("Opening for chinese")
+    layout = self._prs.slide_layouts.get_by_name("Opening")
     slide = self._prs.slides.add_slide(layout)
     holders = slide.shapes.placeholders
  
